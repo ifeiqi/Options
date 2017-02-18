@@ -62,3 +62,24 @@ Function OptionRho(OptionType, S, K, T, r, volatility, dividend)
         OptionRho = -K * T * Exp(-r * T) * (1 - Nd2(S, K, T, r, volatility, dividend))
     End If
 End Function
+
+'Newton-Raphson Method iterative estimation of implied volatility
+
+Function ImpliedVolatility(OptionType, S, K, T, r, price, dividend, Optional guess = 0.5)
+    dVol = 0.000001
+    epsilon = 0.000001
+    maxIter = 500
+    vol_1 = guess
+    i = 1
+    Do
+       Value_1 = OptionPrice(OptionType, S, K, T, r, vol_1, dividend)
+       vol_2 = vol_1 - dVol
+       Value_2 = OptionPrice(OptionType, S, K, T, r, vol_2, dividend)
+       dx = (Value_2 - Value_1) / dVol
+       If Abs(dx) < epsilon Or i = maxIter Then Exit Do
+       vol_1 = vol_1 - (price - Value_1) / dx
+       i = i + 1
+    Loop
+    ImpliedVolatility = vol_1
+End Function
+
