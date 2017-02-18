@@ -1,4 +1,3 @@
-Attribute VB_Name = "Module1"
 Function d1(S, K, T, r, volatility, dividend)
     d1 = (Log(S / K) + (r - dividend + 0.5 * volatility ^ 2) * T) / (volatility * (Sqr(T)))
 End Function
